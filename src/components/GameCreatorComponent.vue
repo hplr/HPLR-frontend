@@ -1,65 +1,77 @@
 <script setup lang="ts">
 
-import GameSideAggregateComponent from 'components/GameSideAggregateComponent.vue';
+// import GameSideAggregateComponent from 'components/GameSideAggregateComponent.vue';
 import { ref } from 'vue';
 import GameDataComponent from 'components/GameDataComponent.vue';
+import { GameData } from 'components/models';
 
 withDefaults(defineProps<Props>(), {
-  title: () => 'a'
+ title: () => 'a'
 });
+
+
+const alert=ref(false)
+const confirm = ref(false)
+let savedData=ref(false)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const gameData = ref<GameData>()
 
 interface Props {
   title: string;
 }
-
-
-const gameSides = ref<string[]>([
-  'First side'
-]);
-
-function addSecondSide() {
-  gameSides.value.push(
-    'Second side'
-  );
+function saveData(){
+  savedData.value = true;
 }
 </script>
 
 <template>
-  <q-form class="q-form">
-    <div class="game-creator-wrapper">
-      <div class="game-data-wrapper">
-        <GameDataComponent/>
-      </div>
-      <div class='game-side-list-wrapper'>
-        <div v-for="(side,index) in gameSides" :key="index" class="game-side-div">
-          <GameSideAggregateComponent :side-name="side" />
-        </div>
-        <div v-if="gameSides.length!=2" class="add-side-btn-wrapper">
-          <q-btn @click="addSecondSide" label="Add second side"/>
-        </div>
-      </div>
-    </div>
-  </q-form>
 
-</template>
+  <q-card class="landing-page-card">
+    <q-card-section class="bg-primary text-white">
+      <div class="text-h6">Our Changing Planet</div>
+      <div class="text-subtitle2">by John Doe</div>
+    </q-card-section>
+
+    <q-separator />
+
+    <q-card-actions align="right">
+      <q-checkbox :model-value="savedData" :disable="false"></q-checkbox>
+      <q-btn label="Define game data" color="primary" @click="alert = true" />
+    </q-card-actions>
+  </q-card>
+    <div class="q-pa-md q-gutter-sm">
+      <q-btn label="Define game data" color="primary" @click="alert = true" />
+      <q-btn label="Confirm" color="primary" @click="confirm = true" />
+
+      <q-dialog v-model="alert" class="dialog-game-data">
+        <q-card class="dialog-game-data">
+          <q-card-section>
+            <div class="text-h6">Define game data</div>
+          </q-card-section>
+
+          <q-card-section class="q-pt-none">
+            <div class="game-data-wrapper">
+              <GameDataComponent :game-data="undefined"/>
+            </div>
+
+          </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn flat label="Save game data" color="primary" @click="saveData" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+
+    </div>
+  </template>
 
 <style scoped>
-.q-form{
-width:90vw;
-  margin-left: 5vw;
-}
+
 .game-data-wrapper {
-  width:90%;
-
+  width:95%;
 }
-.game-side-list-wrapper {
-  margin: 0;
-  display: flex;
-  flex-direction: row;
-}
-
-.add-side-btn-wrapper {
-  margin-top: 12vw;
-  margin-left: 10vw;
+.dialog-game-data{
+  width:50vw;
+  max-width: none !important;
 }
 </style>

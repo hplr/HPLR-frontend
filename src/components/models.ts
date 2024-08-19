@@ -4,9 +4,20 @@ export interface Game{
   'gameData': GameData
 }
 
+export interface GameData {
+  ranking: boolean,
+  gamePointSize: number,
+  gameTurnLength: number,
+  gameTime: number,
+  gameStartTime: string | undefined,
+  gameMission: string,
+  gameDeployment: string
+  locationSaveDto: GameLocation | undefined,
+}
+
 export interface GameSide{
   'allegiance': Allegiance,
-  'playerDataList': PlayerData[]
+  'playerDataList'?: PlayerData[]
 }
 
 export interface GameLocation{
@@ -18,10 +29,10 @@ export interface GameLocation{
   'isPrivate': boolean
 }
 
-export interface PlayerData{
-  'playerId': string,
-  'primaryArmy': ArmyData
-  'allyArmyList': ArmyData[]
+export interface PlayerData {
+  playerId: string;
+  primaryArmy?: ArmyData; // Optional property
+  allyArmyList: ArmyData[];
 }
 
 export interface ArmyData{
@@ -30,22 +41,36 @@ export interface ArmyData{
   'pointValue': number
 }
 
-enum Allegiance {
-  LOYALIST = 'LOYALIST',
-  TRAITOR = 'TRAITOR',
-}
-
 export interface GameArmyType {
   name:string;
 }
 
-export interface GameData {
-  'ranking': boolean,
-  'gamePointSize': number,
-  'gameTurnLength': number,
-  'gameTime': number,
-  'gameStartTime': string | undefined | null ,
-  'gameMission': string,
-  'gameDeployment': string,
-  'locationSaveDto': GameLocation | undefined
+
+
+export interface PlayerSnapshot {
+
+  'userId': {
+    'id': string
+  },
+  'userData': {
+    'name': string,
+    'nickname': string,
+    'email': string,
+    'motto': string
+  },
+  'playerRanking': {
+    'score': number
+  },
+  'playerSecuritySnapshot': {
+    'registrationTime': Date,
+    'lastLogin': Date
+  }
+
 }
+
+// ENUMS
+export enum Allegiance {
+  LOYALIST = 'LOYALIST',
+  TRAITOR = 'TRAITOR',
+}
+

@@ -1,0 +1,72 @@
+.image-holder {
+  margin-top: 0;
+  margin-left: 0;
+  width: 60%;
+  height: 60%;
+}
+
+.image-holder img {
+  margin-top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.landing-page {
+  background-image: url("src/assets/bg-image.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.landing-page-h6 {
+  font-size: 2vw;
+}
+
+.landing-page-card {
+  background-color: rgba(255, 255, 255, 0) !important;
+  box-shadow: none !important;
+}
+
+.landing-page-card-section {
+  background: rgba(255, 255, 255, 0.3) !important;
+  color: white;
+  width: 30vw;
+  height: 40vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2vw !important;
+  padding: 0 !important;
+}
+
+.landing-page-content {
+  height: 15vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+svg {
+  fill: white;
+
+}
+
+.landing-page-card-section:hover svg{
+  fill: black;
+}
+
+.landing-page-card:hover {
+  cursor: pointer;
+}
+
+
+.landing-page-card-section:hover {
+  background: rgba(255, 255, 255, 0.5) !important;
+  color: black !important;
+
+}
+
+.landing-page-card-section:hover .landing-page-content {
+  opacity: 90%;
+}

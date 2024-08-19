@@ -1,52 +1,56 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+  <div class="main-wrapper">
 
-        <q-toolbar-title>
-          Heresy Polish League Ranking
-        </q-toolbar-title>
+    <q-layout view="lHh Lpr lFf">
+      <q-header elevated>
+        <q-toolbar>
+          <q-btn
+            flat
+            dense
+            round
+            icon="menu"
+            aria-label="Menu"
+            @click="toggleLeftDrawer"
+          />
 
-<!--        <div>Quasar v{{ $q.version }}</div>-->
-      </q-toolbar>
-    </q-header>
+          <q-toolbar-title>
+            Heresy Polish League Ranking
+          </q-toolbar-title>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Navigation
-        </q-item-label>
+          <!--        <div>Quasar v{{ $q.version }}</div>-->
+        </q-toolbar>
+      </q-header>
 
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
+      <q-drawer
+        v-model="leftDrawerOpen"
+        bordered
+      >
+        <q-list>
+          <q-item-label
+            header
+          >
+            Navigation
+          </q-item-label>
 
-    <q-page-container>
-      <router-view />
-    </q-page-container>
-  </q-layout>
+          <EssentialLink
+            v-for="link in linksList"
+            :key="link.title"
+            v-bind="link"
+          />
+        </q-list>
+      </q-drawer>
+
+      <q-page-container>
+        <router-view />
+      </q-page-container>
+    </q-layout>
+
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import '../css/landingPage.css'
 import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
 
 defineOptions({
@@ -94,7 +98,13 @@ const linksList: EssentialLinkProps[] = [
 
 const leftDrawerOpen = ref(false);
 
-function toggleLeftDrawer () {
+function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 </script>
+
+<style scoped>
+.main-wrapper {
+  background-color: black;
+}
+</style>
