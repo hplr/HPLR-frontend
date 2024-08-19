@@ -1,46 +1,23 @@
-<template>
-  <div class="player-name-wrapper">
-    <h3>{{ playerSnapshot?.userData.nickname || 'Default player' }}</h3>
-  </div>
-  <div class="player-wrapper">
-    <div class="primary-army-wrapper">
-      <h6>Primary army</h6>
-      <ArmyComponent
-        :army-data="playerDataObject.primaryArmy"
-      />
-    </div>
-    <div class="ally-army-list-wrapper">
-      <h6>Allied armies</h6>
-      <q-list>
-        <q-item v-for="(army, index) in playerDataObject.allyArmyList" :key="index" class="army-div">
-          <ArmyComponent
-            :army-data="army"
-            @update:army-data="(value: ArmyData) => updateAllyArmy(index, value)"
-          />
-        </q-item>
-      </q-list>
-      <q-btn align="left" flat label="Add ally army" @click="addAllyArmy" class="ally-army-btn" />
-    </div>
-    <q-btn align="left" flat label="Save player" @click="savePlayer" class="ally-army-btn" />
-  </div>
-</template>
-
 <script setup lang="ts">
-import { defineProps, defineEmits, reactive, watch } from 'vue';
+import { defineEmits, defineProps, reactive, watch } from 'vue';
 import ArmyComponent from 'components/ArmyComponent.vue';
-import { PlayerData, PlayerSnapshot, ArmyData } from 'components/models';
+import { ArmyData, PlayerData } from 'components/models';
 
 const emit = defineEmits(['update:modelValue']);
 
 const defaultPlayerDataObject: PlayerData = {
   playerId: '',
-  primaryArmy: ArmyData,
-  allyArmyList: []
+  primaryArmy: {
+    armyName: '',
+    armyType: '',
+    pointValue: 0,
+  },
+  allyArmyList: [],
 };
 
 const props = defineProps<{
   player: PlayerData | undefined;
-  playerSnapshot: PlayerSnapshot | undefined;
+  // playerSnapshot: PlayerSnapshot | undefined;
 }>();
 
 const playerDataObject = reactive<PlayerData>({
@@ -49,9 +26,15 @@ const playerDataObject = reactive<PlayerData>({
 });
 
 
-function updateAllyArmy(index: number, updatedArmy: ArmyData) {
-  playerDataObject.allyArmyList[index] = { ...updatedArmy };
-}
+// Watch for changes in the entire playerDataObject
+watch(
+  () => playerDataObject,
+  (newValue) => {
+    emit('update:modelValue', { ...newValue });
+  },
+  { deep: true }
+);
+
 
 function addAllyArmy() {
   playerDataObject.allyArmyList.push({
@@ -60,20 +43,38 @@ function addAllyArmy() {
     pointValue: 0,
   });
 }
-
-// Watch for changes in the entire playerDataObject and emit them to the parent component
-watch(
-  () => playerDataObject,
-  (newValue) => {
-    console.log(newValue)
-    emit('update:modelValue', { ...newValue });
-  },
-  { deep: true }
-);
-
-
+function updateArmy(index: number, updatedArmy: ArmyData) {
+  playerDataObject.allyArmyList[index] = updatedArmy;
+}
 </script>
 
+<template>
+  <div class="player-name-wrapper">
+    <h3>{{'Default player' }}</h3>
+  </div>
+  <div class="player-wrapper">
+    <div class="primary-army-wrapper">
+      <h6>Primary army</h6>
+      <ArmyComponent
+        v-model="playerDataObject.primaryArmy"
+        :army-data="playerDataObject.primaryArmy"
+        :key="'primaryArmy'"
+      />
+    </div>
+    <div class="ally-army-list-wrapper">
+      <h6>Allied armies</h6>
+      <q-list>
+        <q-item v-for="(army, index) in playerDataObject.allyArmyList" :key="index" class="army-div">
+          <ArmyComponent
+            v-model="playerDataObject.allyArmyList[index]"
+            :army-data="army"
+          />
+        </q-item>
+      </q-list>
+      <q-btn align="left" flat label="Add ally army" @click="addAllyArmy" class="ally-army-btn" />
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .player-name-wrapper {

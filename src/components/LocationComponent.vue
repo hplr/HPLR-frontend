@@ -1,4 +1,9 @@
 <script setup lang="ts">
+
+const props = defineProps<{
+  gameLocation: GameLocation | undefined;
+}>();
+
 import { ref, watch, defineProps, defineEmits } from 'vue';
 
 interface GameLocation {
@@ -22,9 +27,6 @@ const defaultGameLocationObject: GameLocation = {
 // Define emits
 const emit = defineEmits(['update:modelValue']);
 
-const props = defineProps<{
-  gameLocation: GameLocation | undefined;
-}>();
 
 const gameLocationObject = ref<GameLocation>(
   props?.gameLocation !== undefined

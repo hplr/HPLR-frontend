@@ -71,13 +71,15 @@
 
       <q-card-section class="q-pt-none">
         <div class="game-data-wrapper">
-          <GameSideAggregateComponent ref="gameFirstSideComponentRef" v-model="gameFirstSide"/>
+          <PlayerComponent v-model="playerData" :player="playerData">
+
+          </PlayerComponent>
         </div>
 
       </q-card-section>
 
       <q-card-actions align="center">
-        <q-btn flat label="Save game data" color="primary" @click="saveData" v-close-popup />
+        <q-btn flat label="Save game data" color="primary" @click="saveFirstSide" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -86,31 +88,29 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import GameDataComponent from 'components/GameDataComponent.vue';
-import GameSideAggregateComponent from 'components/GameSideAggregateComponent.vue';
-import { Allegiance, GameData, GameSide } from 'components/models';
+import { GameData, PlayerData } from 'components/models';
+import PlayerComponent from 'components/PlayerComponent.vue';
 
 
 const alert=ref(false)
 const firstSide=ref(false)
 let savedData=ref(false)
 let validData=ref(false)
+const playerData = ref<PlayerData>()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 let gameData = ref<GameData>()
-let gameFirstSide = ref<GameSide>({
-  allegiance: Allegiance.LOYALIST,
-  playerDataList: [],
-})
+
 const gameDataComponentRef = ref<InstanceType<typeof GameDataComponent> | null>(null)
-const gameFirstSideComponentRef = ref<InstanceType<typeof GameSideAggregateComponent> | null>(null)
 function saveData(){
   savedData.value = true;
   validData.value = true;
   gameData.value = gameDataComponentRef.value?.saveGameDataObject().value
-  gameFirstSide.value = gameFirstSideComponentRef.value?.saveGameSideObject() ?? {
-    allegiance: Allegiance.LOYALIST,
-    playerDataList: [],
-  };
-  console.log(gameFirstSide)
+}
+
+function saveFirstSide(){
+  savedData.value = true;
+  validData.value = true;
+  console.log(playerData )
 }
 </script>
 

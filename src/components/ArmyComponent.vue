@@ -1,46 +1,72 @@
 <script setup lang="ts">
-import { defineEmits, defineProps, reactive, watch } from 'vue';
-import { ArmyData } from 'components/models';
+
 
 const props = defineProps<{
-  armyData: ArmyData;
+  armyData: ArmyData | undefined;
 }>();
 
-const emit = defineEmits(['update:army-data']);
+import { ref, watch, defineProps, defineEmits } from 'vue';
+import GenericOptionSelector from 'components/GenericOptionSelector.vue';
 
-const localArmyData = reactive({ ...props.armyData });
+export interface ArmyData{
+  'armyType': string,
+  'armyName': string,
+  'pointValue': number
+}
 
-// Watch for changes in localArmyData and emit them
-watch(
-  () => localArmyData,
-  (newValue) => {
-    emit('update:army-data', { ...newValue });
-  },
-  { deep: true }
+
+const defaultArmyData: ArmyData = {
+  'armyType': '',
+  'armyName': '',
+  'pointValue': 0
+};
+
+// Define emits
+const emit = defineEmits(['update:modelValue']);
+
+
+const armyDataObject = ref<ArmyData>(
+  props?.armyData !== undefined
+    ? { ...defaultArmyData, ...props.armyData } // Merge defaults with provided data
+    : defaultArmyData // Use default data if props.gameData is undefined
 );
+
+watch(armyDataObject, (newValue) => {
+  emit('update:modelValue', newValue);
+}, { deep: true });
+
+function saveArmyDataObject(){
+  console.log(armyDataObject.value)
+  return armyDataObject
+}
 </script>
 
 <template>
-  <!-- Example input fields for editing army data -->
-  <q-input v-model="localArmyData.armyName" label="Army Name" />
-  <q-input v-model="localArmyData.armyType" label="Army Type" />
-  <q-input v-model.number="localArmyData.pointValue" label="Point Value" />
+  <div class="army-wrapper">
+    <q-input
+      v-model="armyDataObject.armyName"
+      label="Army Name"
+      class="game-data-input-field"
+    />
+
+    <GenericOptionSelector
+      v-model="armyDataObject.armyType"
+      class="game-data-input-field"
+      :api-link="'http://localhost:8083/game/army'"
+    />
+
+    <q-input
+      v-model.number="armyDataObject.pointValue"
+      label="Point Value"
+      class="game-data-input-field"
+    />
+
+    <div class="btn-wrapper">
+      <q-btn flat @click="saveArmyDataObject" :disable="false">Save</q-btn>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-.army-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
 
-.army-wrapper * {
-  margin: 0;
-}
-
-.btn-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-top: 2vw;
-}
 </style>
