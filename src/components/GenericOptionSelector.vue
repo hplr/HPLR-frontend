@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import axios from 'axios';
-import { ref, computed, watch } from 'vue';
+
 
 // Define the props for the component
 interface Props {
@@ -12,6 +11,9 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   modelValue: null,
 });
+
+import axios from 'axios';
+import { ref, computed, watch } from 'vue';
 
 // References to store options, selected value, and loading state
 const options = ref<{ label: string; value: string }[]>([]);

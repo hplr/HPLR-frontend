@@ -54,14 +54,15 @@ defineExpose({
         <div class="game-data-column">
           <div class="game-data-column">
             <q-input class="game-data-input-field"
-                     v-model="gameDataObject.gamePointSize"
+                     v-model.number="gameDataObject.gamePointSize"
+                     type="number"
                      label="Point limit" />
-            <q-input class="game-data-input-field" v-model="gameDataObject.gameTime" label="Game duration(H)" />
+            <q-input class="game-data-input-field" v-model.number="gameDataObject.gameTime" type="number" label="Game duration(H)" />
             <GenericOptionSelector class="game-data-input-field" v-model="gameDataObject.gameDeployment" :api-link="'http://localhost:8083/game/deployment'" />
           </div>
         </div>
         <div class="game-data-column">
-            <q-input class="game-data-input-field" v-model="gameDataObject.gameTurnLength" label="Max number of turns" />
+            <q-input class="game-data-input-field" v-model.number="gameDataObject.gameTurnLength"     type="number" label="Max number of turns" />
             <q-input class="game-data-input-field" filled v-model="gameDataObject.gameStartTime">
             <template v-slot:prepend>
               <q-icon name="event" class="cursor-pointer">

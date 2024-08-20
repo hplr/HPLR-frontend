@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { defineEmits, defineProps, reactive, watch } from 'vue';
 import ArmyComponent from 'components/ArmyComponent.vue';
-import { ArmyData, PlayerData } from 'components/models';
+import { PlayerData } from 'components/models';
 
 const emit = defineEmits(['update:modelValue']);
 
 const defaultPlayerDataObject: PlayerData = {
   playerId: '',
+  playerName: '',
   primaryArmy: {
     armyName: '',
     armyType: '',
@@ -17,7 +18,6 @@ const defaultPlayerDataObject: PlayerData = {
 
 const props = defineProps<{
   player: PlayerData | undefined;
-  // playerSnapshot: PlayerSnapshot | undefined;
 }>();
 
 const playerDataObject = reactive<PlayerData>({
@@ -43,14 +43,11 @@ function addAllyArmy() {
     pointValue: 0,
   });
 }
-function updateArmy(index: number, updatedArmy: ArmyData) {
-  playerDataObject.allyArmyList[index] = updatedArmy;
-}
 </script>
 
 <template>
   <div class="player-name-wrapper">
-    <h3>{{'Default player' }}</h3>
+    <h3>{{ playerDataObject.playerName || 'Default player' }}</h3>
   </div>
   <div class="player-wrapper">
     <div class="primary-army-wrapper">
