@@ -20,8 +20,14 @@ const defaultGameData: GameData = {
   gameTurnLength: 0,
   gameTime: 0,
   gameStartTime: undefined,
-  gameMission: '',
-  gameDeployment: '',
+  gameMission: {
+    label:'',
+    value:''
+  },
+  gameDeployment: {
+    label:'',
+    value:''
+  },
   locationSaveDto: undefined,
 };
 
@@ -58,7 +64,10 @@ defineExpose({
                      type="number"
                      label="Point limit" />
             <q-input class="game-data-input-field" v-model.number="gameDataObject.gameTime" type="number" label="Game duration(H)" />
-            <GenericOptionSelector class="game-data-input-field" v-model="gameDataObject.gameDeployment" :api-link="'http://localhost:8083/game/deployment'" />
+            <GenericOptionSelector
+              class="game-data-input-field"
+              v-model="gameDataObject.gameDeployment"
+              :api-link="'http://localhost:8083/game/deployment'" />
           </div>
         </div>
         <div class="game-data-column">
@@ -88,7 +97,10 @@ defineExpose({
               </q-icon>
             </template>
             </q-input>
-            <GenericOptionSelector class="game-data-input-field" v-model="gameDataObject.gameMission" :api-link="'http://localhost:8083/game/mission'" ></GenericOptionSelector>
+            <GenericOptionSelector
+              class="game-data-input-field"
+              v-model="gameDataObject.gameMission"
+              :api-link="'http://localhost:8083/game/mission'" ></GenericOptionSelector>
         </div>
       </div>
     </div>

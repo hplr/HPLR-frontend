@@ -42,7 +42,7 @@ function addPlayer(playerSnapshot: PlayerSnapshotHandler) {
       playerName: playerName,
       primaryArmy: {
         armyName: '',
-        armyType: '',
+        armyType: {label:'', value:''},
         pointValue: 0
       },
       allyArmyList: []
@@ -117,8 +117,5 @@ h1 {
 }
 .add-player-btn {
   margin: 1vw;
-}
-.save-btn {
-  margin-top: 1vw;
 }
 </style>

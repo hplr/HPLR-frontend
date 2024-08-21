@@ -4,7 +4,7 @@
     <q-card  class="landing-page-card" @click=" alert=true"  :class="savedData && validData?'landing-page-card-valid':'landing-page-card-invalid'">
       <q-card-section class="landing-page-card-section">
         <div class="landing-page-content image-holder">
-          <svg width="800px" height="800px" viewBox="0 -2.5 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <svg width="800px" height="800px" viewBox="0 -2.5 40 40" xmlns="http://www.w3.org/2000/svg" >
             <title>craps</title>
             <desc>Created with Sketch.</desc>
             <g id="icons" stroke="none" stroke-width="1" fill-rule="evenodd">
@@ -25,7 +25,7 @@
     <q-card  class="landing-page-card" @click=" firstSide=true"  :class="savedData && validData?'landing-page-card-valid':'landing-page-card-invalid'">
       <q-card-section class="landing-page-card-section">
         <div class="landing-page-content image-holder">
-          <svg width="800px" height="800px" viewBox="0 -2.5 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <svg width="800px" height="800px" viewBox="0 -2.5 40 40" xmlns="http://www.w3.org/2000/svg" >
             <title>craps</title>
             <desc>Created with Sketch.</desc>
             <g id="icons" stroke="none" stroke-width="1" fill-rule="evenodd">
@@ -46,7 +46,7 @@
     <q-card  class="landing-page-card" @click=" secondSide=true"  :class="savedData && validData?'landing-page-card-valid':'landing-page-card-invalid'">
       <q-card-section class="landing-page-card-section">
         <div class="landing-page-content image-holder">
-          <svg width="800px" height="800px" viewBox="0 -2.5 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <svg width="800px" height="800px" viewBox="0 -2.5 40 40" xmlns="http://www.w3.org/2000/svg" >
             <title>craps</title>
             <desc>Created with Sketch.</desc>
             <g id="icons" stroke="none" stroke-width="1" fill-rule="evenodd">
@@ -130,7 +130,16 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import GameDataComponent from 'components/GameDataComponent.vue';
-import { Allegiance, Game, GameData, GameRequest, GameSide } from 'components/models';
+import {
+  Allegiance,
+  ArmyData,
+  ArmyDataRequest,
+  Game,
+  GameData,
+  GameRequest,
+  GameSide, PlayerData,
+  PlayerDataRequest
+} from 'components/models';
 import GameSideComponent from 'components/GameSideComponent.vue';
 
 
@@ -154,8 +163,14 @@ let gameData = ref<GameData>({
   gameTurnLength: 0,
   gameTime: 0,
   gameStartTime:  undefined,
-  gameMission: '',
-  gameDeployment: '',
+  gameMission: {
+    label:'',
+    value:''
+  },
+  gameDeployment: {
+    label:'',
+    value:''
+  },
   locationSaveDto:  undefined
 })
 
@@ -166,8 +181,8 @@ const game = ref<Game>({
 })
 
 const gameRequest = ref<GameRequest>({
-  firstSide: firstSideData.value,
-  secondSide: secondSideData.value,
+  firstSide: null,
+  secondSide: null,
   ranking: false,
   gamePointSize: 0,
   gameTurnLength: 0,
@@ -199,20 +214,92 @@ function saveSecondSide(){
   console.log(secondSideData )
 }
 
+function transformArmyData(armyData: ArmyData): ArmyDataRequest {
+  return {
+    armyType: armyData.armyType.value,  // Extracting 'value' from armyType
+    armyName: armyData.armyName,
+    pointValue: armyData.pointValue,
+  };
+}
+
+function transformPlayerData(playerData: PlayerData): PlayerDataRequest {
+  return {
+    playerId: playerData.playerId,
+    primaryArmy: playerData.primaryArmy ? transformArmyData(playerData.primaryArmy) : undefined,
+    allyArmyList: playerData.allyArmyList.map(transformArmyData), // Transform each ally army
+  };
+}
+
+function mapPlayerDataToRequest(playerDataArray: PlayerData[]): PlayerDataRequest[] {
+  return playerDataArray.map(transformPlayerData);
+}
+
+import { useQuasar } from 'quasar'
+const $q = useQuasar()
+
+function validateLocationSaveDto(): boolean{
+  console.log(gameRequest.value.locationSaveDto)
+  if(gameRequest.value.locationSaveDto === undefined){
+    $q.notify({
+      message: 'You must provide game location info!',
+      icon: 'report_problem',
+      color: 'negative'
+    })
+    return false;
+  }
+  console.log(gameRequest.value.locationSaveDto.name==='')
+  if(gameRequest.value.locationSaveDto.name===''){
+    $q.notify({
+      message: 'You must fill location name',
+      icon: 'report_problem',
+      color: 'negative'
+    })
+    return false;
+  }
+  if(gameRequest.value.locationSaveDto.isPrivate &&
+    (
+         gameRequest.value.locationSaveDto.country === ''
+      || gameRequest.value.locationSaveDto.city === ''
+      || gameRequest.value.locationSaveDto.street === ''
+      || gameRequest.value.locationSaveDto.houseNumber === ''
+    )){
+    $q.notify({
+      message: 'You must fill all location data fields',
+      icon: 'report_problem',
+      color: 'negative'
+    })
+    return false;
+  }
+  return true;
+
+}
+
+
 async function saveGame(): Promise<unknown> {
+
   console.log(gameData)
   gameRequest.value.ranking= gameData.value.ranking;
   gameRequest.value.gamePointSize=gameData.value.gamePointSize;
   gameRequest.value.gameTurnLength=gameData.value.gameTurnLength;
   gameRequest.value.gameTime=gameData.value.gameTime;
   gameRequest.value.gameStartTime=gameData.value.gameStartTime;
-  gameRequest.value.gameMission=gameData.value.gameMission;
-  gameRequest.value.gameDeployment=gameData.value.gameDeployment;
+  gameRequest.value.gameMission=gameData.value.gameMission.value;
+  gameRequest.value.gameDeployment=gameData.value.gameDeployment.value;
   gameRequest.value.locationSaveDto=gameData.value.locationSaveDto;
+  gameRequest.value.firstSide = {
+    allegiance: game.value.firstSide.allegiance,
+    playerDataList: mapPlayerDataToRequest(game.value.firstSide.playerDataList)
+  }
   if(game.value.secondSide?.playerDataList.length!==undefined && game.value.secondSide?.playerDataList.length<1){
     gameRequest.value.secondSide = null
   }
   console.log(gameRequest)
+  validData.value = validateLocationSaveDto()
+  if(!validData.value){
+    console.log(validData.value)
+    throw new Error('Validation error');
+  }
+
   try {
     const response = await fetch('http://localhost:8083/game/save', {
       method: 'POST',
@@ -224,16 +311,25 @@ async function saveGame(): Promise<unknown> {
 
     // Check if the response is OK (status code 200-299)
     if (!response.ok) {
+
+      $q.notify({
+        message: response.status.toString(),
+        icon: 'report_problem',
+        color: 'negative'
+      })
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+
 
     // Parse the response body as JSON
     return await response.json();
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error saving the game:', error);
+
     throw error; // Re-throw the error to be handled by the caller
   }
+
 }
 
 </script>

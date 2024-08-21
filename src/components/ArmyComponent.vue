@@ -1,6 +1,8 @@
 <script setup lang="ts">
 
 
+import { ArmyData } from 'components/models';
+
 const props = defineProps<{
   armyData: ArmyData | undefined;
 }>();
@@ -8,15 +10,10 @@ const props = defineProps<{
 import { ref, watch, defineProps, defineEmits } from 'vue';
 import GenericOptionSelector from 'components/GenericOptionSelector.vue';
 
-export interface ArmyData{
-  'armyType': string,
-  'armyName': string,
-  'pointValue': number
-}
 
 
 const defaultArmyData: ArmyData = {
-  'armyType': '',
+  'armyType': {label:'', value:''},
   'armyName': '',
   'pointValue': 0
 };

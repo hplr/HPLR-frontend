@@ -10,7 +10,7 @@ const defaultPlayerDataObject: PlayerData = {
   playerName: '',
   primaryArmy: {
     armyName: '',
-    armyType: '',
+    armyType: {label:'', value:''},
     pointValue: 0,
   },
   allyArmyList: [],
@@ -39,7 +39,7 @@ watch(
 function addAllyArmy() {
   playerDataObject.allyArmyList.push({
     armyName: `Army ${playerDataObject.allyArmyList.length + 1}`,
-    armyType: 'Questoris Knights',
+    armyType: {label:'Questoris Knights', value:'Questoris Knights'},
     pointValue: 0,
   });
 }

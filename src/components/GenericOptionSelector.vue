@@ -3,19 +3,22 @@
 
 // Define the props for the component
 interface Props {
-  apiLink: string;          // API link to fetch options
-  modelValue: string | null; // The value to bind with v-model
+  apiLink: string;
+  modelValue: {
+    label:string,
+    value:string
+  } | null;  // Expect only a string or null
 }
 
-// Use withDefaults to set default values if needed
+// Set default prop values
 const props = withDefaults(defineProps<Props>(), {
   modelValue: null,
 });
 
+import { defineProps, withDefaults, ref, computed, defineEmits } from 'vue';
 import axios from 'axios';
-import { ref, computed, watch } from 'vue';
 
-// References to store options, selected value, and loading state
+// Reference to store options and loading state
 const options = ref<{ label: string; value: string }[]>([]);
 const fetchingOptions = ref(false);
 
@@ -30,10 +33,9 @@ async function fetchOptions() {
   try {
     const response = await axios.get(props.apiLink);
     const data = response.data;
-    // Map the API data to the format expected by QSelect
     options.value = data.map((item: { name: string }) => ({
       label: item.name,
-      value: item.name, // Persist the name as the value
+      value: item.name,
     }));
   } catch (error) {
     console.error('Error fetching options:', error);
@@ -45,25 +47,20 @@ async function fetchOptions() {
 // Call fetchOptions on component mount
 fetchOptions();
 
+// Emit event to update modelValue in the parent component
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: {label:string, value:string} | null): void;
+}>();
+
 // Computed property to handle v-model
 const selectedValue = computed({
   get() {
     console.log(props.modelValue)
-    return props.modelValue;
+    return props.modelValue;  // Return the string value
   },
-  set(newValue: string | null) {
-    emit('update:modelValue', newValue);
+  set(newValue: { label:string, value:string } | null) {
+    emit('update:modelValue', newValue);  // Emit the string value
   },
-});
-
-// Emit event for updating the modelValue in the parent component
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string | null): void;
-}>();
-
-// Watch for changes in modelValue and log them (optional)
-watch(selectedValue, (newValue) => {
-  console.log('Selected value changed:', newValue);
 });
 </script>
 

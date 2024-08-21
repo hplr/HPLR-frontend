@@ -1,12 +1,12 @@
 export interface Game {
   'firstSide': GameSide;
   'secondSide': GameSide;
-  'gameData': GameData | undefined;
+  'gameData': GameData;
 }
 
 export interface GameRequest {
-  'firstSide': GameSide
-  'secondSide': GameSide | null
+  'firstSide': GameSideRequest | null
+  'secondSide': GameSideRequest | null
   ranking: boolean,
   gamePointSize: number,
   gameTurnLength: number,
@@ -17,14 +17,37 @@ export interface GameRequest {
   locationSaveDto: GameLocation | undefined,
 }
 
+export interface GameSideRequest {
+  'allegiance': Allegiance,
+  'playerDataList': PlayerDataRequest[]
+}
+
+export interface PlayerDataRequest {
+  playerId: string;
+  primaryArmy?: ArmyDataRequest;
+  allyArmyList: ArmyDataRequest[];
+}
+
+export interface ArmyDataRequest {
+  'armyType': string,
+  'armyName': string,
+  'pointValue': number
+}
+
 export interface GameData {
   ranking: boolean,
   gamePointSize: number,
   gameTurnLength: number,
   gameTime: number,
   gameStartTime: string | undefined,
-  gameMission: string,
-  gameDeployment: string
+  gameMission: {
+    label:string,
+    value:string
+  },
+  gameDeployment: {
+    label:string,
+    value:string
+  },
   locationSaveDto: GameLocation | undefined,
 }
 
@@ -50,14 +73,11 @@ export interface PlayerData {
 }
 
 export interface ArmyData {
-  'armyType': string,
+  'armyType': { label:string, value:string },
   'armyName': string,
   'pointValue': number
 }
 
-export interface GameArmyType {
-  name: string;
-}
 
 
 export interface PlayerSnapshot {
