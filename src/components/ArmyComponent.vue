@@ -32,10 +32,6 @@ watch(armyDataObject, (newValue) => {
   emit('update:modelValue', newValue);
 }, { deep: true });
 
-function saveArmyDataObject(){
-  console.log(armyDataObject.value)
-  return armyDataObject
-}
 </script>
 
 <template>
@@ -58,9 +54,6 @@ function saveArmyDataObject(){
       class="game-data-input-field"
     />
 
-    <div class="btn-wrapper">
-      <q-btn flat @click="saveArmyDataObject" :disable="false">Save</q-btn>
-    </div>
   </div>
 </template>
 

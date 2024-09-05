@@ -1,5 +1,5 @@
 <template>
-  <q-page class="row items-center justify-evenly landing-page">
+  <q-page class="row items-center justify-evenly landing-page hplr-page">
     <!--    <GameCreator/>-->
     <q-card class="landing-page-card" @click="$router.push('game')">
       <q-card-section class="landing-page-card-section" @click="checkClick">
@@ -85,7 +85,7 @@
             </g>
           </svg>
         </div>
-        <div class="landing-page-h6 landing-page-content">Profile</div>
+        <div class="landing-page-h6 landing-page-content">Players</div>
       </q-card-section>
     </q-card>
   </q-page>

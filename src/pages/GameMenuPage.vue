@@ -1,5 +1,5 @@
 <template>
-  <q-page class="row items-center justify-evenly landing-page">
+  <q-page class="row items-center justify-evenly landing-page game-menu-page hplr-page" >
     <q-card class="landing-page-card" @click="$router.push('game/create')">
       <q-card-section class="landing-page-card-section" @click="checkClick">
         <div class="landing-page-content image-holder">
@@ -63,7 +63,7 @@
     </q-card>
 
     <q-card class="landing-page-card">
-      <q-card-section class="landing-page-card-section" @click="checkClick">
+      <q-card-section class="landing-page-card-section" @click="$router.push('game/myGames')">
         <div class="landing-page-content image-holder">
           <!--<a href="https://www.flaticon.com/free-icons/dice" title="dice icons">Dice icons created by Jonggol - Flaticon</a>-->
           <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
@@ -99,5 +99,7 @@ function checkClick(){
 </script>
 
 <style scoped>
-
+.game-menu-page {
+  background-image: url("src/assets/bg-image-game-menu.JPG");
+}
 </style>

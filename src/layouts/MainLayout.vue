@@ -13,11 +13,10 @@
             @click="toggleLeftDrawer"
           />
 
-          <q-toolbar-title>
+          <q-toolbar-title @click="$router.push('/')" style="cursor: pointer">
             Heresy Polish League Ranking
           </q-toolbar-title>
-
-          <!--        <div>Quasar v{{ $q.version }}</div>-->
+          <PlayerMenuComponent :token = "token"/>
         </q-toolbar>
       </q-header>
 
@@ -49,9 +48,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import '../css/landingPage.css'
 import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
+import PlayerMenuComponent from 'components/PlayerMenuComponent.vue';
+import { JWTToken, PlayerSnapshot } from 'components/models';
+import { useCookies } from 'vue3-cookies';
+import * as JWT from 'jwt-decode';
 
 defineOptions({
   name: 'MainLayout'
@@ -101,6 +104,35 @@ const leftDrawerOpen = ref(false);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
+
+const token = ref<string | undefined>(undefined); // Token state
+
+async function checkToken() {
+  const cookies = useCookies();
+  console.log(cookies.cookies.get('token'))
+  if( cookies.cookies.get('token')===null){
+    return undefined
+  }
+  const token: JWTToken = JWT.jwtDecode(cookies.cookies.get('token'))
+  const response = await fetch('http://localhost:8083/player/'+token.id, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  if (!response.ok) {
+
+    return undefined
+  }
+
+  const fetchedPlayer: PlayerSnapshot = await response.json();
+
+  return fetchedPlayer.userData.email
+}
+
+onMounted(async () => {
+  token.value = await checkToken(); // Set the token value once the Promise resolves
+});
 </script>
 
 <style scoped>
