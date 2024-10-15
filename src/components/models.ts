@@ -151,8 +151,9 @@ export interface GameSnapshotLocation {
 }
 
 export interface GameSnapshotScore {
-  'index': number,
-  'scoreValue': number
+  'turnNumber': number,
+  'scoreValue': number,
+  'table': boolean
 }
 
 export interface GameSnapshotArmy {
@@ -180,8 +181,9 @@ export interface GameSnapshotSide {
   'allegiance': Allegiance,
   'gameSidePlayerDataList': GameSnapshotSidePlayer [],
   'isFirst': boolean,
-  'scorePerTurnList': GameSnapshotScore | null[] | null
+  'scorePerTurnList': GameSnapshotScore[] | null[] | null
 }
+
 export interface GameSnapshot {
   'gameId': {
     'gameId': string
@@ -218,6 +220,14 @@ export interface GameSnapshot {
   'gameStatus': GameStatus,
   'firstGameSide': GameSnapshotSide,
   'secondGameSide': GameSnapshotSide | null
+}
+
+export interface SaveScoreForGameSideDto {
+  gameId: string,
+  gameSideId: string,
+  turnNumber: number,
+  score: number,
+  table: boolean
 }
 
 // ENUMS
