@@ -45,7 +45,7 @@
     </q-card>
 
     <q-card  class="landing-page-card">
-      <q-card-section class="landing-page-card-section">
+      <q-card-section class="landing-page-card-section"  @click="$router.push('finishedGames')">
         <div class="landing-page-content image-holder">
           <svg width="800px" height="800px" viewBox="0 -2.5 40 40" xmlns="http://www.w3.org/2000/svg" >
             <title>craps</title>

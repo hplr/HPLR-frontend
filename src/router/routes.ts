@@ -19,7 +19,8 @@ const routes: RouteRecordRaw[] = [
       { path: 'myGames', component: () => import('pages/GameForPlayerPage.vue') },
       { path: 'createdGames', component: () => import('pages/CreatedGamesPage.vue') },
       { path: 'awaitingGames', component: () => import('pages/AwaitingGamesPage.vue') },
-      { path: 'ongoingGames', component: () => import('pages/OngoingGamesPage.vue') }
+      { path: 'ongoingGames', component: () => import('pages/OngoingGamesPage.vue') },
+      { path: 'finishedGames', component: () => import('pages/FinishedGamesPage.vue') }
     ]
   },
 
